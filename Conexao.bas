@@ -24,3 +24,16 @@ ErroConex:
             
 End Function
 
+
+
+' https://www.macoratti.net/08/02/vb_cdcli.htm
+
+' https://macoratti.net/10/10/vb_xls2.htm
+
+' https://macoratti.net/08/02/vb_cdcli.htm
+
+' https://macoratti.net/vb6_msfg.htm
+
+' https://macoratti.net/vb6_exp.htm
+
+' https://macoratti.net/vb6grids.htm
