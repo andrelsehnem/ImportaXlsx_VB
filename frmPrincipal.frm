@@ -124,7 +124,7 @@ Private Sub CriaTabela()
     With xlWorksheet.UsedRange
         nLinha = .Rows.Count
         nColuna = .Columns.Count
-        grid.Cols = nColuna
+        grid.Cols = nColuna + 1
         ReDim data(1 To .Rows.Count, 1 To .Columns.Count)
         grid.TextMatrix(0, 0) = "ID"
         For i = 1 To nColuna

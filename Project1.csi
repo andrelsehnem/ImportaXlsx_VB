@@ -1,7 +1,6 @@
 [History]
-1=#P0#=mb	#P1#=PreencheTabelaBanco	#P2#=Project1/frmPrincipal/PreencheTabelaBanco	#P3#=	#P4#=	#P5#=MembMethodPublic	#P6#=20230331102936	#P7#=0	#P8#=1	.
-2=#P0#=mb	#P1#=grid_Click	#P2#=Project1/frmPrincipal/grid_Click	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20230331102606	#P7#=0	#P8#=1	.
-3=#P0#=mb	#P1#=CriaTabela	#P2#=Project1/frmPrincipal/CriaTabela	#P3#=	#P4#=	#P5#=MembMethodPublic	#P6#=20230331103116	#P7#=0	#P8#=10	.
+1=#P0#=mb	#P1#=CriaTabela	#P2#=Project1/frmPrincipal/CriaTabela	#P3#=	#P4#=	#P5#=MembMethodPublic	#P6#=20230331103116	#P7#=0	#P8#=26	.
+2=#P0#=mb	#P1#=PreencheTabelaBanco	#P2#=Project1/frmPrincipal/PreencheTabelaBanco	#P3#=	#P4#=	#P5#=MembMethodPublic	#P6#=20230331102936	#P7#=0	#P8#=1	.
+3=#P0#=mb	#P1#=Form_Load	#P2#=Project1/frmPrincipal/Form_Load	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20230331102229	#P7#=0	#P8#=7	.
 4=#P0#=mb	#P1#=cmdCarregarArquivo_Click	#P2#=Project1/frmPrincipal/cmdCarregarArquivo_Click	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20230331101838	#P7#=0	#P8#=0	.
-5=#P0#=mb	#P1#=Form_Load	#P2#=Project1/frmPrincipal/Form_Load	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20230331102229	#P7#=0	#P8#=7	.
-6=#P0#=mb	#P1#=Conecta	#P2#=Project1/Conexao/Conecta	#P3#=	#P4#=	#P5#=MembMethodPublic	#P6#=20230331094032	#P7#=0	#P8#=24	.
+5=#P0#=mb	#P1#=Conecta	#P2#=Project1/Conexao/Conecta	#P3#=	#P4#=	#P5#=MembMethodPublic	#P6#=20230331094032	#P7#=0	#P8#=24	.
