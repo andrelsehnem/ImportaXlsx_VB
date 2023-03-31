@@ -18,8 +18,7 @@ Begin VB.Form frmPrincipal
    LinkTopic       =   "Form1"
    ScaleHeight     =   6900
    ScaleWidth      =   9810
-   ShowInTaskbar   =   0   'False
-   StartUpPosition =   3  'Windows Default
+   StartUpPosition =   2  'CenterScreen
    Begin MSFlexGridLib.MSFlexGrid grid 
       Height          =   4455
       Left            =   120
@@ -82,11 +81,15 @@ Private arquivo As String
 Private xlApp As Object
 Private xlWorkbook As Object
 Private xlWorksheet As Object
+Private nomeTabela As String
+Private colunas As String
 
 Private Sub cmdCarregarArquivo_Click()
     arquivo = dir & "\" & file
     LerArquivo
     CriaTabela
+    PreencheTabelaBanco
+    FecharArquivo
 End Sub
 
 Private Sub dir_Change()
@@ -104,31 +107,35 @@ Private Sub Form_Load()
     drive = App.Path
     dir = App.Path
     
+    
 End Sub
 
 Private Sub CriaTabela()
     Dim posBarra As Integer
-    Dim nomeTabela As String
     Dim sql As String
+    colunas = " "
     
-    nomeTabela = file
-    sql = "create table " & nomeTabela & " ( id serial primary key "
+    nomeTabela = Left(file, InStrRev(file, ".") - 1)
+    sql = "create table IF NOT EXISTS " & nomeTabela & " ( id serial primary key "
     
     With xlWorksheet.UsedRange
         nLinha = .Rows.Count
         nColuna = .Columns.Count
         ReDim data(1 To .Rows.Count, 1 To .Columns.Count)
-        For i = 1 To nLinha
-            sql = sql & ", " & .Cells(1, i).Value & " VARCHAR(255) "
-            Debug.Print sql
+        For i = 1 To nColuna
+            sql = sql & ", " & .cells(1, i).Value & " VARCHAR(255) "
+            If i = nColuna Then
+                colunas = colunas & .cells(1, i).Value
+            Else
+                colunas = colunas & .cells(1, i).Value & ", "
+            End If
         Next i
     End With
     
     sql = sql & ");"
-    Debug.Print (sql);
+    'Debug.Print sql
     cn.Execute sql
 End Sub
-
 
 Private Sub LerArquivo()
     Dim data() As Variant
@@ -140,28 +147,36 @@ Private Sub LerArquivo()
     
 End Sub
 
-Private Sub LerDados()
-    With xlWorksheet.UsedRange
-        ReDim data(1 To .Rows.Count, 1 To .Columns.Count)
-        For i = 1 To nLinha
-            For j = 1 To nColuna
-                If i <= UBound(data, 1) And j <= UBound(data, 2) Then
-                    data(i, j) = .Cells(i, j).Value
-                End If
-            Next j
-        Next i
-    End With
-    
+Private Sub FecharArquivo()
     xlWorkbook.Close
     xlApp.Quit
     
     Set xlWorksheet = Nothing
     Set xlWorkbook = Nothing
     Set xlApp = Nothing
-    
-    For i = 1 To UBound(data, 1)
-        For j = 1 To UBound(data, 2)
-            Debug.Print data(i, j) & " "
-        Next j
-    Next i
+End Sub
+
+Private Sub PreencheTabelaBanco()
+    Dim sql As String
+    With xlWorksheet.UsedRange
+        ReDim data(1 To .Rows.Count, 1 To .Columns.Count)
+        For i = 2 To nLinha
+            sql = "insert into " & nomeTabela & " (" & colunas & ") values ("
+            For j = 1 To nColuna
+                If i <= UBound(data, 1) And j <= UBound(data, 2) Then
+                    If j = nColuna Then
+                        sql = sql & "'" & .cells(i, j).Value & "') "
+                    Else
+                        sql = sql & "'" & .cells(i, j).Value & "', "
+                    End If
+                End If
+            Next j
+            'Debug.Print sql
+            cn.Execute sql
+        Next i
+    End With
+End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+    cn.Execute "drop table " & nomeTabela
 End Sub
