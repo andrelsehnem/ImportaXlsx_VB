@@ -1,3 +1,5 @@
 [History]
-1=#P0#=mb	#P1#=Conecta	#P2#=Project1/Conexao/Conecta	#P3#=	#P4#=	#P5#=MembMethodPublic	#P6#=20230330172454	#P7#=0	#P8#=31	.
-2=#P0#=mb	#P1#=Form_Load	#P2#=Project1/frmPrincipal/Form_Load	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20230330170551	#P7#=0	#P8#=3	.
+1=#P0#=mb	#P1#=CriaTabela	#P2#=Project1/frmPrincipal/CriaTabela	#P3#=	#P4#=	#P5#=MembMethodPublic	#P6#=20230331095545	#P7#=0	#P8#=-1	.
+2=#P0#=mb	#P1#=cmdCarregarArquivo_Click	#P2#=Project1/frmPrincipal/cmdCarregarArquivo_Click	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20230331100754	#P7#=0	#P8#=4	.
+3=#P0#=mb	#P1#=Form_Load	#P2#=Project1/frmPrincipal/Form_Load	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20230331083809	#P7#=0	#P8#=6	.
+4=#P0#=mb	#P1#=Conecta	#P2#=Project1/Conexao/Conecta	#P3#=	#P4#=	#P5#=MembMethodPublic	#P6#=20230331094032	#P7#=0	#P8#=24	.

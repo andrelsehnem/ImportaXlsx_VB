@@ -3,7 +3,9 @@ Public strCon As String
 Public cn As ADODB.Connection
 
 Public Function Conecta() As Boolean
-    strCon = "Driver={PostgreSQL Unicode};Server=localhost;Database=bancoModelo;Uid=postgres;Pwd=admin"
+    'strCon = "Driver={PostgreSQL Unicode};Server=localhost;Database=bancoModelo;Uid=postgres;Pwd=admin"
+    strCon = "Driver={PostgreSQL Unicode};Server=localhost;Database=bancoModelo;Uid=postgres;Pwd=vssql" 'pg10
+    
     Set cn = New ADODB.Connection
     cn.CursorLocation = adUseServer
     cn.ConnectionString = strCon

@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
 Begin VB.Form frmPrincipal 
    Caption         =   "Xlsx"
    ClientHeight    =   6900
@@ -28,6 +28,8 @@ Begin VB.Form frmPrincipal
       _ExtentX        =   16536
       _ExtentY        =   7858
       _Version        =   393216
+      Rows            =   1
+      FixedRows       =   0
    End
    Begin VB.DriveListBox drive 
       Height          =   315
@@ -85,12 +87,13 @@ Private nomeTabela As String
 Private colunas As String
 
 Private Sub cmdCarregarArquivo_Click()
+    grid.Clear
     arquivo = dir & "\" & file
     LerArquivo
     CriaTabela
     PreencheTabelaBanco
     FecharArquivo
-    MsgBox "Tabela preenchida no banco de dados!"
+    MsgBox "Tabela preenchida!", vbOKOnly, "Sucesso"
 End Sub
 
 Private Sub dir_Change()
@@ -107,8 +110,7 @@ Private Sub Form_Load()
     Conecta
     drive = App.Path
     dir = App.Path
-    
-    
+
 End Sub
 
 Private Sub CriaTabela()
@@ -122,6 +124,7 @@ Private Sub CriaTabela()
     With xlWorksheet.UsedRange
         nLinha = .Rows.Count
         nColuna = .Columns.Count
+        grid.Cols = nColuna
         ReDim data(1 To .Rows.Count, 1 To .Columns.Count)
         For i = 1 To nColuna
             sql = sql & ", " & .cells(1, i).Value & " VARCHAR(255) "
@@ -130,6 +133,7 @@ Private Sub CriaTabela()
             Else
                 colunas = colunas & .cells(1, i).Value & ", "
             End If
+            grid.TextMatrix(0, i - 1) = .cells(1, i).Value
         Next i
     End With
     
@@ -159,6 +163,7 @@ End Sub
 
 Private Sub PreencheTabelaBanco()
     Dim sql As String
+    grid.Rows = nLinha
     With xlWorksheet.UsedRange
         ReDim data(1 To .Rows.Count, 1 To .Columns.Count)
         For i = 2 To nLinha
@@ -170,6 +175,7 @@ Private Sub PreencheTabelaBanco()
                     Else
                         sql = sql & "'" & .cells(i, j).Value & "', "
                     End If
+                    grid.TextMatrix(i - 1, j - 1) = .cells(i, j).Value
                 End If
             Next j
             'Debug.Print sql
