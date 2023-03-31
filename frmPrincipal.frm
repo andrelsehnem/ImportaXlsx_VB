@@ -28,8 +28,8 @@ Begin VB.Form frmPrincipal
       _ExtentX        =   16536
       _ExtentY        =   7858
       _Version        =   393216
-      Rows            =   1
-      FixedRows       =   0
+      FixedCols       =   0
+      AllowUserResizing=   1
    End
    Begin VB.DriveListBox drive 
       Height          =   315
@@ -126,6 +126,7 @@ Private Sub CriaTabela()
         nColuna = .Columns.Count
         grid.Cols = nColuna
         ReDim data(1 To .Rows.Count, 1 To .Columns.Count)
+        grid.TextMatrix(0, 0) = "ID"
         For i = 1 To nColuna
             sql = sql & ", " & .cells(1, i).Value & " VARCHAR(255) "
             If i = nColuna Then
@@ -133,7 +134,7 @@ Private Sub CriaTabela()
             Else
                 colunas = colunas & .cells(1, i).Value & ", "
             End If
-            grid.TextMatrix(0, i - 1) = .cells(1, i).Value
+            grid.TextMatrix(0, i) = .cells(1, i).Value
         Next i
     End With
     
@@ -168,6 +169,7 @@ Private Sub PreencheTabelaBanco()
         ReDim data(1 To .Rows.Count, 1 To .Columns.Count)
         For i = 2 To nLinha
             sql = "insert into " & nomeTabela & " (" & colunas & ") values ("
+            grid.TextMatrix(i - 1, 0) = i - 1
             For j = 1 To nColuna
                 If i <= UBound(data, 1) And j <= UBound(data, 2) Then
                     If j = nColuna Then
@@ -175,7 +177,7 @@ Private Sub PreencheTabelaBanco()
                     Else
                         sql = sql & "'" & .cells(i, j).Value & "', "
                     End If
-                    grid.TextMatrix(i - 1, j - 1) = .cells(i, j).Value
+                    grid.TextMatrix(i - 1, j) = .cells(i, j).Value
                 End If
             Next j
             'Debug.Print sql
@@ -187,3 +189,4 @@ End Sub
 Private Sub Form_Unload(Cancel As Integer)
     cn.Execute "drop table " & nomeTabela
 End Sub
+
