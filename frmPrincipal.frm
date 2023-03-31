@@ -90,6 +90,7 @@ Private Sub cmdCarregarArquivo_Click()
     CriaTabela
     PreencheTabelaBanco
     FecharArquivo
+    MsgBox "Tabela preenchida no banco de dados!"
 End Sub
 
 Private Sub dir_Change()
