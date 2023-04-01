@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
 Begin VB.Form frmPrincipal 
    Caption         =   "Xlsx"
    ClientHeight    =   6900
@@ -19,16 +19,25 @@ Begin VB.Form frmPrincipal
    ScaleHeight     =   6900
    ScaleWidth      =   9810
    StartUpPosition =   2  'CenterScreen
+   Begin VB.CommandButton cmdExportar 
+      Caption         =   "Exportar PDF"
+      Height          =   495
+      Left            =   6720
+      TabIndex        =   6
+      Top             =   1680
+      Width           =   1215
+   End
    Begin MSFlexGridLib.MSFlexGrid grid 
       Height          =   4455
       Left            =   120
       TabIndex        =   5
       Top             =   2280
-      Width           =   9375
-      _ExtentX        =   16536
+      Width           =   9495
+      _ExtentX        =   16748
       _ExtentY        =   7858
       _Version        =   393216
       FixedCols       =   0
+      BackColorBkg    =   16777215
       AllowUserResizing=   1
    End
    Begin VB.DriveListBox drive 
@@ -55,11 +64,11 @@ Begin VB.Form frmPrincipal
    End
    Begin VB.CommandButton cmdCarregarArquivo 
       Caption         =   "Carregar"
-      Height          =   360
+      Height          =   480
       Left            =   5280
       TabIndex        =   1
-      Top             =   1800
-      Width           =   990
+      Top             =   1680
+      Width           =   1215
    End
    Begin VB.Label lblArquivo 
       AutoSize        =   -1  'True
@@ -86,16 +95,6 @@ Private xlWorksheet As Object
 Private nomeTabela As String
 Private colunas As String
 
-Private Sub cmdCarregarArquivo_Click()
-    grid.Clear
-    arquivo = dir & "\" & file
-    LerArquivo
-    CriaTabela
-    PreencheTabelaBanco
-    FecharArquivo
-    MsgBox "Tabela preenchida!", vbOKOnly, "Sucesso"
-End Sub
-
 Private Sub dir_Change()
     file = dir
 End Sub
@@ -105,36 +104,48 @@ Private Sub drive_Change()
 End Sub
 
 Private Sub Form_Load()
-    Dim b As Boolean
-    
     Conecta
     drive = App.Path
     dir = App.Path
+End Sub
 
+Private Sub cmdCarregarArquivo_Click()
+    
+    grid.Clear
+    arquivo = dir & "\" & file
+        
+    If arquivo = dir & "\" Then GoTo jump
+    
+    LerArquivo
+    CriaTabela
+    PreencheTabelaBanco
+    FecharArquivo
+    MsgBox "Tabela preenchida!", vbOKOnly, "Sucesso"
+jump:
+    
 End Sub
 
 Private Sub CriaTabela()
-    Dim posBarra As Integer
     Dim sql As String
     colunas = " "
     
     nomeTabela = Left(file, InStrRev(file, ".") - 1)
-    sql = "create table IF NOT EXISTS " & nomeTabela & " ( id serial primary key "
+    sql = "create table IF NOT EXISTS " & Replace(nomeTabela, " ", "_") & " ( id serial primary key "
     
     With xlWorksheet.UsedRange
         nLinha = .Rows.Count
         nColuna = .Columns.Count
         grid.Cols = nColuna + 1
-        ReDim data(1 To .Rows.Count, 1 To .Columns.Count)
+        ReDim Data(1 To .Rows.Count, 1 To .Columns.Count)
         grid.TextMatrix(0, 0) = "ID"
         For i = 1 To nColuna
-            sql = sql & ", " & .cells(1, i).Value & " VARCHAR(255) "
+            sql = sql & ", " & Replace(.cells(1, i).Value, " ", "_") & " VARCHAR(255) "
             If i = nColuna Then
-                colunas = colunas & .cells(1, i).Value
+                colunas = colunas & Replace(.cells(1, i).Value, " ", "_")
             Else
-                colunas = colunas & .cells(1, i).Value & ", "
+                colunas = colunas & Replace(.cells(1, i).Value, " ", "_") & ", "
             End If
-            grid.TextMatrix(0, i) = .cells(1, i).Value
+            grid.TextMatrix(0, i) = Replace(.cells(1, i).Value, " ", "_")
         Next i
     End With
     
@@ -144,13 +155,9 @@ Private Sub CriaTabela()
 End Sub
 
 Private Sub LerArquivo()
-    Dim data() As Variant
-    Dim i As Long, j As Long
-
     Set xlApp = CreateObject("Excel.Application")
     Set xlWorkbook = xlApp.Workbooks.Open(arquivo)
     Set xlWorksheet = xlWorkbook.Worksheets(1)
-    
 End Sub
 
 Private Sub FecharArquivo()
@@ -166,12 +173,12 @@ Private Sub PreencheTabelaBanco()
     Dim sql As String
     grid.Rows = nLinha
     With xlWorksheet.UsedRange
-        ReDim data(1 To .Rows.Count, 1 To .Columns.Count)
+        ReDim Data(1 To .Rows.Count, 1 To .Columns.Count)
         For i = 2 To nLinha
-            sql = "insert into " & nomeTabela & " (" & colunas & ") values ("
+            sql = "insert into " & Replace(nomeTabela, " ", "_") & " (" & colunas & ") values ("
             grid.TextMatrix(i - 1, 0) = i - 1
             For j = 1 To nColuna
-                If i <= UBound(data, 1) And j <= UBound(data, 2) Then
+                If i <= UBound(Data, 1) And j <= UBound(Data, 2) Then
                     If j = nColuna Then
                         sql = sql & "'" & .cells(i, j).Value & "') "
                     Else
@@ -186,7 +193,23 @@ Private Sub PreencheTabelaBanco()
     End With
 End Sub
 
+Private Sub cmdExportar_Click()
+    frmPrint.grid.Width = (nColuna + 1) * 975
+    frmPrint.grid.Height = nLinha * 255
+    frmPrint.Width = frmPrint.grid.Width
+    frmPrint.Height = frmPrint.grid.Height
+    frmPrint.grid.Rows = grid.Rows
+    frmPrint.grid.Cols = grid.Cols
+    For i = 0 To grid.Rows - 1
+       For j = 0 To grid.Cols - 1
+           frmPrint.grid.TextMatrix(i, j) = grid.TextMatrix(i, j)
+       Next j
+    Next i
+    
+    frmPrint.PrintForm
+End Sub
+
 Private Sub Form_Unload(Cancel As Integer)
-    cn.Execute "drop table " & nomeTabela
+    cn.Execute "drop table " & Replace(nomeTabela, " ", "_")
 End Sub
 
