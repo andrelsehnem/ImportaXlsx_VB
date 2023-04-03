@@ -130,6 +130,7 @@ Private Sub CriaTabela()
     colunas = " "
     
     nomeTabela = Left(file, InStrRev(file, ".") - 1)
+    cn.Execute "DROP TABLE IF EXISTS " & Replace(nomeTabela, " ", "_") & ";"
     sql = "create table IF NOT EXISTS " & Replace(nomeTabela, " ", "_") & " ( id serial primary key "
     
     With xlWorksheet.UsedRange
@@ -210,6 +211,7 @@ Private Sub cmdExportar_Click()
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
+    On Error Resume Next
     cn.Execute "drop table " & Replace(nomeTabela, " ", "_")
 End Sub
 
